@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>您有新消息（1）</title>
+</head>
+<body>
+	<div>
+		<ul class="msgs">
+			<li>消息内容</li>
+		</ul>
+		<div>
+			<input type="text" name="" class="con">
+		</div>
+	</div>
+	<script type="text/javascript">
+		var ul = document.querySelector('.msgs');
+		var input = document.querySelector('.con');
+		//连接服务器
+		var ws = new WebSocket("ws://localhost:8003");
+		//连接成功触发
+		ws.onopen = function(){
+			alert("连接成功");
+		}
+		//连接失败触发
+		ws.onerror = function(){
+			alert("连接失败");
+		}
+		//接收消息触发
+		ws.onmessage = function(msg){
+			add(msg.data);
+		}
+		//添加内容
+		input.onkeydown = function(e){
+			if(e.keyCode == 13){
+				// add(this.value);
+				ws.send(this.value);
+			}
+		}
+		function add(con){
+			var li = document.createElement("li");
+				li.innerHTML = con;
+				ul.appendChild(li);
+				input.value = "";
+		}
+	</script>
+</body>
+</html>
